@@ -12,14 +12,14 @@ export default class Annotator extends Component {
   state = {
     showBubble: false,
     bubblePosition: {}
-  }
+  };
+  serialized = [];
 
   constructor() {
-    super()
-    rangy.init()
-
+    super();
     const self = this;
 
+    rangy.init();
     this.highlighter = rangyHighlight.createHighlighter();
     
     this.highlighter.addClassApplier(rangyClassApplier.createClassApplier("highlight", {
@@ -35,17 +35,30 @@ export default class Annotator extends Component {
       }
     }));
 
-    this.createHighlight = this.createHighlight.bind(this)
-    this.createAnnotation = this.createAnnotation.bind(this)
-    this.onSelectionChange = this.onSelectionChange.bind(this)
+    this.createHighlight = this.createHighlight.bind(this);
+    this.createAnnotation = this.createAnnotation.bind(this);
+    this.onSelectionChange = this.onSelectionChange.bind(this);
   }
 
   createHighlight() {
-    this.highlighter.highlightSelection("highlight");
+    const selection = this.highlighter.highlightSelection("highlight");
+    this.serialized.push(this.highlighter.serialize(selection));
     this.clearSelection();
   }
 
+  onClear = () => {
+    this.highlighter.removeAllHighlights();
+  };
+  onRestore = () => {
+    if (this.serialized && this.serialized.length > 0) {
+      this.serialized.forEach((serial) => {
+        this.highlighter.deserialize(serial);
+      });
+    }
+  };
+
   createAnnotation() {
+    console.log('[createAnnotation]');
     this.highlighter.highlightSelection("annotation");
     this.clearSelection();
   }
@@ -74,6 +87,8 @@ export default class Annotator extends Component {
     const { showBubble, bubblePosition } = this.state;
     return (
       <div className="Annotator-container">
+        <button onClick={this.onClear}>Clear Selection</button>
+        <button onClick={this.onRestore}>Restore Selection</button>
         <TextSelector onSelectionChange={this.onSelectionChange}>
           <Bubble show={showBubble} position={bubblePosition} onHighlight={this.createHighlight} />
           {this.props.children}
