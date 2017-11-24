@@ -41,8 +41,8 @@ export default class Annotator extends Component {
   }
 
   createHighlight() {
-    const selection = this.highlighter.highlightSelection("highlight");
-    this.serialized = this.highlighter.serialize(selection);
+    this.highlighter.highlightSelection("highlight");
+    this.serialized = this.highlighter.serialize();
     this.clearSelection();
   }
 
