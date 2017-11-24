@@ -6,7 +6,8 @@ import ContentItemIcon from './contentItemIcon'
 export default props => (
   <li className="list-group-item">
     <Link to={`/detail/${props.id}`}>
-      <ContentItemIcon type={props.type} />  
+      <ContentItemIcon type={props.type} /> 
+      &nbsp;
       {props.title}
     </Link>
   </li>

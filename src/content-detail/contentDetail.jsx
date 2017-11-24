@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import content from '../content-list/content.json'
 
 import AuthorDetail from '../author-detail/authorDetail'
@@ -25,6 +26,8 @@ export default class ContentDetail extends Component {
             &nbsp;
             <AuthorDetail {...author} />
           </h1>
+
+          <Link to="/"><i className="fa fa-arrow-left" aria-hidden="true"></i></Link>
         </div>
         <p>{content.description}</p>
         <Content {...content}/>
@@ -34,7 +37,8 @@ export default class ContentDetail extends Component {
 }
 
 function pick(o, ...props) {
-  return Object.assign({}, ...props.map(prop => {
-    if (o[prop]) return {[prop]: o[prop]};
-  }));
+  return props.reduce((current, prop) => {
+    if (o[prop]) current[prop] = o[prop];
+    return current;
+  }, {});
 }

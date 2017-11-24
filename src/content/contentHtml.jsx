@@ -2,13 +2,6 @@ import React, { Component } from 'react';
 
 
 export default class ContentHtml extends Component {
-  constructor() {
-    var s = document.createElement('script');
-    s.src = 'https://hypothes.is/embed.js';
-    document.head.appendChild(s);
-    super()
-  }
-
   render() {
     return (
       <div>
