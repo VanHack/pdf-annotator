@@ -12,7 +12,7 @@ class App extends Component {
       <div className="container">
         <div className="row">
           <Router>
-            <div class="col-md-12">
+            <div className="col-md-12">
               <Route exact path="/" component={Home} />
               <Route path="/detail/:id" component={ContentDetail}/>
             </div>

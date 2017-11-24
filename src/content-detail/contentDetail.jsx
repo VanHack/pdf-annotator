@@ -20,7 +20,7 @@ export default class ContentDetail extends Component {
     }
     return (
       <div className="ContentDetail">
-        <div class="page-header">
+        <div className="page-header">
           <h1>
             <a href={content.url}>{content.title}</a>
             &nbsp;

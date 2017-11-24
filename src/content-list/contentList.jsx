@@ -14,7 +14,7 @@ export default class ContentList extends Component {
   render() {
     return (           
       <div>
-        <div class="page-header">
+        <div className="page-header">
           <h1>
             Content list
           </h1>
