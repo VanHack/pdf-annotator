@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import content from '../content-list/content.json'
 
+import AuthorDetail from '../author-detail/authorDetail'
+
 export default class ContentDetail extends Component {
   componentWillMount() {
     const id = parseInt(this.props.match.params.id, 10)
@@ -12,11 +14,19 @@ export default class ContentDetail extends Component {
 
   render() {
     const {content} = this.state;
+    const author = {
+      author: content.author,
+      author_url: content.author_url
+    }
     return (
       <div className="ContentDetail">
-        <h4>
-          <a href={content.url}>{content.title}</a>
-        </h4>
+        <div class="page-header">
+          <h1>
+            <a href={content.url}>{content.title}</a>
+            &nbsp;
+            <AuthorDetail {...author} />
+          </h1>
+        </div>
         <p>{content.description}</p>
       </div>
     );
