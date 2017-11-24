@@ -9,7 +9,7 @@ import './App.css';
 class App extends Component {
   render() {
     return (
-      <div className="container">
+      <div className="container main-container">
         <div className="row">
           <Router>
             <div className="col-md-12">

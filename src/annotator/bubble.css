@@ -1,0 +1,8 @@
+.bubble.tooltip .btn span{
+  font-size: 11px;
+  display: block;
+}
+
+.bubble.tooltip .tooltip-inner {
+  padding: 0;
+}

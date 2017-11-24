@@ -2,21 +2,16 @@ import React, { Component } from 'react';
 
 import ContentPdf from './contentPdf'
 import ContentHtml from './contentHtml'
+import Annotator from '../annotator/annotator'
 
 export default class Content extends Component {
-  
-  constructor() {
-    var s = document.createElement('script');
-    s.src = 'https://hypothes.is/embed.js';
-    document.head.appendChild(s);
-    super()
-  }
-
   render() {
     return (
-      this.props.type === 'pdf' ?
-      <ContentPdf {...this.props} /> :
-      <ContentHtml {...this.props} />
+      <Annotator>
+        {this.props.type === 'pdf' ?
+        <ContentPdf {...this.props} /> :
+        <ContentHtml {...this.props} />}
+      </Annotator>
     )
   }
 }

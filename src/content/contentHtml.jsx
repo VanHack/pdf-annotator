@@ -5,10 +5,10 @@ export default class ContentHtml extends Component {
   render() {
     return (
       <div>
-        <figure className="pull-left">
+        <figure className="text-center">
           <img src={this.props.image} alt={this.props.title} />
-          <div dangerouslySetInnerHTML={{__html: this.props.content}} />
         </figure>
+        <div dangerouslySetInnerHTML={{__html: this.props.content}} />
       </div>
     )
   }
