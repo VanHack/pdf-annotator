@@ -1,6 +1,9 @@
 import React from "react";
 import { mount } from "enzyme";
+import { MemoryRouter } from 'react-router-dom'
+
 import ContentList from "./contentList";
+import ContentItem from "./contentItem";
 import content from "./content.json";
 
 describe("ContentList Component", () => {
@@ -9,7 +12,9 @@ describe("ContentList Component", () => {
   const contentList = () => {
     if (!mountedContentList) {
       mountedContentList = mount(
-        <ContentList {...props} />
+        <MemoryRouter>
+          <ContentList {...props} />
+        </MemoryRouter>
       );
     }
     return mountedContentList;
@@ -27,14 +32,20 @@ describe("ContentList Component", () => {
     const ul = contentList().find("ul");
     expect(ul.length).toBeGreaterThan(0);
   });
+  
+  it("should have called fetchContent()", () => {
+    contentList()
+    expect(props.fetchContent).toHaveBeenCalled();
+  });
 
   describe('passing items', () => {
     beforeEach(() => {
       props.items = content
     })
-    it('should be rendered', () => {
-      const lis = contentList().find("ul > li");
-      expect(lis.length).toEqual(content.length)
+
+    it('should render <ContentItem />s', () => {
+      const items = contentList().find(ContentItem);
+      expect(items.length).toEqual(content.length)
     })
   })
 });

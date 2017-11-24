@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
-import {ContentListContainer} from './content-list/contentList'
+import {BrowserRouter as Router, Route} from 'react-router-dom';
+
+import Home from './home/home';
+import ContentDetail from './content-detail/contentDetail';
+
 import logo from './logo.svg';
 import './App.css';
 
@@ -12,7 +16,12 @@ class App extends Component {
           <h1 className="App-title">Welcome to React</h1>
         </header>
         <div className="App-intro">
-          <ContentListContainer />
+          <Router>
+            <div>
+              <Route exact path="/" component={Home} />
+              <Route path="/detail/:id" component={ContentDetail}/>
+            </div>
+          </Router>
         </div>
       </div>
     );

@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+
 import { fetchContent } from './actions'
+import ContentItem from './contentItem'
+import './contentList.css';
 
 export default class ContentList extends Component {
   componentWillMount() {
@@ -14,11 +17,7 @@ export default class ContentList extends Component {
         <h4>Content List</h4>
 
         <ul>
-        {this.props.items.map((item, index) => (
-          <li key={index}>
-            {item.title}
-          </li>
-        ))}
+        {this.props.items.map((item, index) => <ContentItem key={index} {...item} />)}
         </ul>
       </div>
     )
