@@ -14,9 +14,13 @@ export default class ContentList extends Component {
   render() {
     return (           
       <div>
-        <h4>Content List</h4>
+        <div class="page-header">
+          <h1>
+            Content list
+          </h1>
+        </div>
 
-        <ul>
+        <ul className="list-group">
         {this.props.items.map((item, index) => <ContentItem key={index} {...item} />)}
         </ul>
       </div>

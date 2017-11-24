@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import ContentItemIcon from './contentItemIcon'
 
 export default props => (
-  <li>
+  <li className="list-group-item">
     <Link to={`/detail/${props.id}`}>
       <ContentItemIcon type={props.type} />  
       {props.title}
