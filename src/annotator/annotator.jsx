@@ -13,7 +13,7 @@ export default class Annotator extends Component {
     showBubble: false,
     bubblePosition: {}
   };
-  serialized = [];
+  serialized;
 
   constructor() {
     super();
@@ -42,7 +42,7 @@ export default class Annotator extends Component {
 
   createHighlight() {
     const selection = this.highlighter.highlightSelection("highlight");
-    this.serialized.push(this.highlighter.serialize(selection));
+    this.serialized = this.highlighter.serialize(selection);
     this.clearSelection();
   }
 
@@ -50,10 +50,8 @@ export default class Annotator extends Component {
     this.highlighter.removeAllHighlights();
   };
   onRestore = () => {
-    if (this.serialized && this.serialized.length > 0) {
-      this.serialized.forEach((serial) => {
-        this.highlighter.deserialize(serial);
-      });
+    if (this.serialized) {
+      this.highlighter.deserialize(this.serialized);
     }
   };
 
