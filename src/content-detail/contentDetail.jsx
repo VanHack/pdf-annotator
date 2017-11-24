@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import content from '../content-list/content.json'
 
 import AuthorDetail from '../author-detail/authorDetail'
+import Content from '../content/content'
 
 export default class ContentDetail extends Component {
   componentWillMount() {
@@ -14,10 +15,8 @@ export default class ContentDetail extends Component {
 
   render() {
     const {content} = this.state;
-    const author = {
-      author: content.author,
-      author_url: content.author_url
-    }
+    const author = pick(content, "author", "author_url")
+
     return (
       <div className="ContentDetail">
         <div className="page-header">
@@ -28,7 +27,14 @@ export default class ContentDetail extends Component {
           </h1>
         </div>
         <p>{content.description}</p>
+        <Content {...content}/>
       </div>
     );
   }
+}
+
+function pick(o, ...props) {
+  return Object.assign({}, ...props.map(prop => {
+    if (o[prop]) return {[prop]: o[prop]};
+  }));
 }
