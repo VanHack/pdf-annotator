@@ -2,26 +2,26 @@ import React, { Component } from 'react';
 import {reduxForm, Field} from 'redux-form'
  
 const validate = values => {
-  const errors = {}
+  const errors = {};
   if (!values.name) {
-    errors.name = 'Required'
+    errors.name = 'Required';
   }
   if (!values.notes) {
-    errors.notes = 'Required'
+    errors.notes = 'Required';
   }
-  return errors
-}
+  return errors;
+};
 
 const renderField = ({ input, placeholder, type, className, meta: { touched, error } }) => (
   <div>
-    <input {...input} placeholder={placeholder} type={type} className={className} />
+    <input {...input} autoFocus={true} placeholder={placeholder} type={type} className={className} />
     {touched && (error && 
       <div className="alert alert-danger" role="alert">
         <span className="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
         {error}
       </div>)}
   </div>
-)
+);
 
 const renderTextArea = ({ input, placeholder, type, className, meta: { touched, error } }) => (
   <div>
@@ -32,7 +32,7 @@ const renderTextArea = ({ input, placeholder, type, className, meta: { touched, 
         {error}
       </div>)}
   </div>
-)
+);
 
 export default class AnnotationForm extends Component {
   render() {
@@ -44,14 +44,14 @@ export default class AnnotationForm extends Component {
           <div className="form-group">
             <label>Your name</label>
             <Field
-              type="text"
+              // type="text"
               name="name"
               className="form-control"
               placeholder="Ex: Richard Sherman"
               component={renderField} />
           </div>
           <div className="form-group">
-            <label>Your name</label>
+            <label>Notes</label>
             <Field 
               name="notes"
               placeholder="Ex: U MAD BRO?"
@@ -69,4 +69,4 @@ export default class AnnotationForm extends Component {
   }
 }
 
-export const AnnotationFormContainer = reduxForm({form: 'annotation', validate})(AnnotationForm)
+export const AnnotationFormContainer = reduxForm({form: 'annotation', validate})(AnnotationForm);

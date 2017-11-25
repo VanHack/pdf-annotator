@@ -22,7 +22,7 @@ function remove_highligth(state, payload) {
 function add_annotation(state, payload) {
   const page = state[payload.page] || [];
   const highlight = page.filter(f => f.id === payload.highlight)[0];
-  var annotations = highlight.annotations || [];
+  const annotations = highlight.annotations || [];
   const newHighlight = {...highlight, annotations: [...annotations, payload.annotation]}
   const index = page.findIndex(i => i.id === newHighlight.id)
   const newPage = [ ...page.slice(0, index), newHighlight, ...page.slice(index + 1) ]

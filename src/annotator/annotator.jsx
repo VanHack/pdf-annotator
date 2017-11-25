@@ -18,7 +18,6 @@ export default class Annotator extends Component {
     showBubble: false,
     bubblePosition: {}
   };
-  serialized;
 
   constructor() {
     super();
@@ -34,7 +33,7 @@ export default class Annotator extends Component {
         href: "",
         onclick: function (e) {
           e.preventDefault();
-          var highlight = self.highlighter.getHighlightForElement(this);
+          const highlight = self.highlighter.getHighlightForElement(this);
           self.showAnnotationPane(highlight, e.clientY);
         }
       }
@@ -63,7 +62,7 @@ export default class Annotator extends Component {
             h.classApplier,
             h.elementId
           ].join("$"))
-      ].join("|")
+      ].join("|");
 
       setTimeout(() =>
         this.highlighter.deserialize(serializedHighlights)
@@ -73,42 +72,42 @@ export default class Annotator extends Component {
 
   createHighlight() {
     const highlights = this.highlighter.highlightSelection("highlight");
-    this.serialized = this.highlighter.serialize();
-    
-    const highlight = highlights[0]
-    highlight.page = window.location.toString()
-    this.props.createHighlight(highlight)
+    if (!highlights || highlights.length <= 0)
+      return;
+    const highlight = highlights[0];
+    highlight.page = window.location.toString();
+    this.props.createHighlight(highlight);
     
     this.clearSelection();
-    var state = this.state
+    const state = this.state;
     state.showBubble = false;    
-    this.setState(state)
+    this.setState(state);
   }
   
   removeHighlight() {
     const highlights = this.highlighter.unhighlightSelection();
     
-    const highlight = highlights[0]
-    highlight.page = window.location.toString()
-    this.props.removeHighlight(highlight)
+    const highlight = highlights[0];
+    highlight.page = window.location.toString();
+    this.props.removeHighlight(highlight);
     
     this.clearSelection();
   }
 
   showAnnotationPane(highlight, clientY) {
     this.hideAnnotationPane();
-    var state = this.state;
+    const state = this.state;
     state.annotationHighlight = highlight.id;
     state.showAnnotationPane = true;
     const top = window.pageYOffset - (document.clientTop || 0);
     state.panePosition = {
       top: clientY + top - 300
-    }
+    };
     this.setState(state);
   }
   
   hideAnnotationPane() {
-    var state = this.state;
+    const state = this.state;
     state.showAnnotationPane = false;
     this.setState(state);
   }
@@ -124,11 +123,11 @@ export default class Annotator extends Component {
   }
 
   onSelectionChange(sel) {
-    var state = this.state
-    state.showBubble = !sel.isCollapsed && (!sel.anchorNode || !sel.anchorNode.parentElement || !sel.anchorNode.parentElement.classList.contains("highlight"))
+    const state = this.state;
+    state.showBubble = !sel.isCollapsed && (!sel.anchorNode || !sel.anchorNode.parentElement || !sel.anchorNode.parentElement.classList.contains("highlight"));
     if (state.showBubble) {
-      var container = document.querySelector('.main-container');
-      var boundary = sel._ranges[0].nativeRange.getBoundingClientRect();
+      const container = document.querySelector('.main-container');
+      const boundary = sel._ranges[0].nativeRange.getBoundingClientRect();
       const top = window.pageYOffset - (document.clientTop || 0);
       state.bubblePosition = {
         left: (boundary.left + boundary.width / 2) - 35 - container.offsetLeft,
@@ -136,14 +135,26 @@ export default class Annotator extends Component {
       }
     }
     
-    this.setState(state)
+    this.setState(state);
   }
+
+  onDocumentClicked = (e) => {
+    let obj;
+    if (e.target) obj = e.target;
+    else if (e.srcElement) obj = e.srcElement;
+    if (obj.nodeType === 3) // defeat Safari bug
+      obj = obj.parentNode;
+    // if the user didn't click on a highlighted area, close any open annotation pane
+    if (!obj.classList.contains("highlight")) {
+      this.hideAnnotationPane();
+    }
+  };
 
   render() {
     const { showBubble, bubblePosition, showAnnotationPane, panePosition, annotationHighlight } = this.state;
     return (
       <div className="Annotator-container">
-        <TextSelector onSelectionChange={this.onSelectionChange}>
+        <TextSelector onSelectionChange={this.onSelectionChange} onClicked={this.onDocumentClicked}>
           {this.props.children}
         </TextSelector>
         <Bubble 
@@ -158,11 +169,11 @@ export default class Annotator extends Component {
             highlight={annotationHighlight}
             onHide={this.hideAnnotationPane} /> : ""}
       </div>
-    )
+    );
   }
 }
 
-const mapStateToProps = state => ({highlights: state.highlights[window.location.toString()] })
-const mapDispatchToProps = dispatch => bindActionCreators({ createHighlight, removeHighlight }, dispatch)
+const mapStateToProps = state => ({highlights: state.highlights[window.location.toString()] });
+const mapDispatchToProps = dispatch => bindActionCreators({ createHighlight, removeHighlight }, dispatch);
 
-export const AnnotatorContainer = connect(mapStateToProps, mapDispatchToProps)(Annotator)
+export const AnnotatorContainer = connect(mapStateToProps, mapDispatchToProps)(Annotator);

@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 import './bubble.css';
 
 export default class Bubble extends Component {
-  show = false
-
   render() {
     return (
       <div className={"bubble tooltip " + (this.props.show ? "in" : "")} role="tooltip" style={this.props.position}>
