@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
-import rangy from 'rangy'
+import rangy from 'rangy';
 import rangyHighlight from 'rangy/lib/rangy-highlighter';
 import rangyClassApplier from 'rangy/lib/rangy-classapplier';
 
-import { createHighlight, removeHighlight } from './actions'
-import TextSelector from './selector'
-import Bubble from './bubble'
-import {AnnotationPaneContainer} from './annotationPane'
+import { loadHighlights, createHighlight, removeHighlight } from './actions';
+import TextSelector from './selector';
+import Bubble from './bubble';
+import {AnnotationPaneContainer} from './annotationPane';
 
 import './annotator.css';
 
@@ -43,11 +43,26 @@ export default class Annotator extends Component {
     this.removeHighlight = this.removeHighlight.bind(this);
     this.onSelectionChange = this.onSelectionChange.bind(this);
     this.hideAnnotationPane = this.hideAnnotationPane.bind(this);
+
+    this.populateHighlights();
   }
 
   componentDidMount() {
     this.parseHighlights();
   }
+
+  // TODO: replace by pre-loading Redux database with the highlights and annotations
+  populateHighlights = () => {
+    const func = loadHighlights((result) => {
+      console.log('highlightsFromApi: ' + result);
+      if (result) {
+        result.forEach((highlight) => {
+          console.log('... highlight: ' + JSON.stringify(highlight));
+        });
+      }
+    });
+    func();
+  };
 
   parseHighlights() {
     if(this.props.highlights) {
@@ -152,14 +167,12 @@ export default class Annotator extends Component {
         <TextSelector onSelectionChange={this.onSelectionChange} onClicked={this.onDocumentClicked}>
           {this.props.children}
         </TextSelector>
-        <Bubble 
-          show={showBubble}
-          position={bubblePosition}
-          onHighlight={this.createHighlight} />
-
+        {showBubble ?
+          <Bubble
+            position={bubblePosition}
+            onHighlight={this.createHighlight} /> : ""}
         {showAnnotationPane ?
           <AnnotationPaneContainer
-            show={showAnnotationPane}
             position={panePosition}
             highlight={annotationHighlight}
             onHide={this.hideAnnotationPane} /> : ""}

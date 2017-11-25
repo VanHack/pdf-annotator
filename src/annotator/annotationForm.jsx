@@ -37,14 +37,13 @@ const renderTextArea = ({ input, placeholder, type, className, meta: { touched, 
 export default class AnnotationForm extends Component {
   render() {
     const { handleSubmit, submitting } = this.props;
-    
     return (
       <div role="form">
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label>Your name</label>
             <Field
-              // type="text"
+              type="text"
               name="name"
               className="form-control"
               placeholder="Ex: Richard Sherman"

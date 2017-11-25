@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
-
 import { createAnnotation, removeAnnotation } from './actions'
 import {AnnotationFormContainer} from './annotationForm'
 import AnnotationList from './annotationList'
@@ -20,14 +19,21 @@ export default class AnnotationPane extends Component {
     };
   }
 
+  nextId = () => {
+    const annotationId = (this.props.annotations.length+1) + '';
+    const id = this.props.highlight + annotationId.padStart(9,'0');
+    return id;
+  };
+
   createAnnotation(values) {
     this.hideAddForm();
     const data = {
+      id: this.nextId(),
       page: window.location.toString(),
       highlight: this.props.highlight,
       annotation: {...values, date: new Date()}
     };
-    this.props.createAnnotation(data)
+    this.props.createAnnotation(data);
   }
 
   showAddForm = () => { this.setShowAddForm(true); };
@@ -39,11 +45,10 @@ export default class AnnotationPane extends Component {
   };
 
   render() {
-    const { show, position, onHide, annotations } = this.props;
-    // console.log(`[render] annotations.length: ${annotations.length}, showAddForm: ${this.state.showAddForm}`);
+    const { position, onHide, annotations } = this.props;
     const showAddForm = (annotations.length <= 0) || this.state.showAddForm;
     return (
-      <div className={"Annotation-container " + (show ? "" : "hide")} style={position}>
+      <div className="Annotation-container" style={position}>
         <div className="panel panel-default">
           <div className="panel-heading">
             <span className="pull-right" onClick={onHide}><i className="fa fa-times"></i></span>
@@ -72,7 +77,7 @@ const mapStateToProps = (state, props) => {
   const highlights = state.highlights[window.location.toString()];
   const filter = highlight => highlight.id === props.highlight;
   const annotations = highlights && highlights.filter(filter).length ? highlights.filter(filter)[0].annotations || [] : [];
-  return {annotations}
+  return {annotations};
 };
 const mapDispatchToProps = dispatch => bindActionCreators({ createAnnotation, removeAnnotation }, dispatch);
 

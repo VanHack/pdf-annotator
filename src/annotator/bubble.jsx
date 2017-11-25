@@ -6,7 +6,7 @@ import './bubble.css';
 export default class Bubble extends Component {
   render() {
     return (
-      <div className={"bubble tooltip " + (this.props.show ? "in" : "")} role="tooltip" style={this.props.position}>
+      <div className="bubble tooltip in" role="tooltip" style={this.props.position}>
         <div className="tooltip-arrow"></div>
         <div className="tooltip-inner">
           <div className="btn-group" role="group" aria-label="First group">
@@ -22,7 +22,6 @@ export default class Bubble extends Component {
 }
 
 Bubble.defaultProps = {
-  show: false,
   position: {}
 };
 

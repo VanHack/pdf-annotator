@@ -29,8 +29,10 @@ After forking and cloning the repo:
 
     cd pdf-annotator
     npm install
+    npm start-mockapi
     npm start
 
+Obs.: `npm start-mockapi` will start the mock API server.
 
 ## Team
 
@@ -44,6 +46,7 @@ After forking and cloning the repo:
 - Npm
 - React
 - Redux
+- [Request-Promise-Native](https://github.com/request/request-promise-native)
 
 
 ## License
