@@ -13,13 +13,10 @@ function add(state, payload) {
 
 function remove(state, payload) {
   const page = state[payload.page] || [];
-  page.splice(
-    page.findIndex(
-      (i) => i.id === payload.id
-    ), 1
-  );
-  state[payload.page] = page
-  return state
+  const index =  page.findIndex((i) => i.id === payload.id)
+  const newPage = [ ...page.slice(0, index), ...page.slice(index + 1) ]
+
+  return {...state, [payload.page]: newPage}
 }
 
 export default function(state = [], action = {}) {

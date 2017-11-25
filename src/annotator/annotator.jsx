@@ -40,6 +40,7 @@ export default class Annotator extends Component {
     }));
 
     this.createHighlight = this.createHighlight.bind(this);
+    this.removeHighlight = this.removeHighlight.bind(this);
     this.createAnnotation = this.createAnnotation.bind(this);
     this.onSelectionChange = this.onSelectionChange.bind(this);
   }
@@ -78,16 +79,16 @@ export default class Annotator extends Component {
     
     this.clearSelection();
   }
-
-  onClear = () => {
-    this.highlighter.removeAllHighlights();
-  };
-
-  onRestore = () => {
-    if (this.serialized) {
-      this.highlighter.deserialize(this.serialized);
-    }
-  };
+  
+  removeHighlight() {
+    const highlights = this.highlighter.unhighlightSelection();
+    
+    const highlight = highlights[0]
+    highlight.page = window.location.toString()
+    this.props.removeHighlight(highlight)
+    
+    this.clearSelection();
+  }
 
   createAnnotation() {
     console.log('[createAnnotation]');
@@ -101,7 +102,7 @@ export default class Annotator extends Component {
 
   onSelectionChange(sel) {
     var state = this.state
-    state.showBubble = !sel.isCollapsed;
+    state.showBubble = !sel.isCollapsed && (!sel.anchorNode || !sel.anchorNode.parentElement || !sel.anchorNode.parentElement.classList.contains("highlight"))
     if (state.showBubble) {
       var container = document.querySelector('.main-container');
       var boundary = sel._ranges[0].nativeRange.getBoundingClientRect();
@@ -119,10 +120,11 @@ export default class Annotator extends Component {
     const { showBubble, bubblePosition } = this.state;
     return (
       <div className="Annotator-container">
-        <button onClick={this.onClear}>Clear Selection</button>
-        <button onClick={this.onRestore}>Restore Selection</button>
         <TextSelector onSelectionChange={this.onSelectionChange}>
-          <Bubble show={showBubble} position={bubblePosition} onHighlight={this.createHighlight} />
+          <Bubble 
+            show={showBubble}
+            position={bubblePosition}
+            onHighlight={this.createHighlight} />
           {this.props.children}
         </TextSelector>
       </div>

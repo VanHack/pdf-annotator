@@ -23,8 +23,10 @@ export default class ContentPdf extends Component {
     this.setState({ numPages });
   }
 
+  
+
   render() {
-    const { pageNumber, numPages } = this.state;
+    const { numPages } = this.state;
 
     return (
       <div className="ContentPdf__container">
@@ -33,9 +35,9 @@ export default class ContentPdf extends Component {
             file={this.props.content}
             onLoadSuccess={this.onDocumentLoad}
           >
-            <Page pageNumber={pageNumber} />
+            {[...Array(numPages)].map((e, i) => <Page key={i} pageNumber={i + 1} />)}
+            
           </Document>
-          <p>Page {pageNumber} of {numPages}</p>
         </div>
       </div>
     );
