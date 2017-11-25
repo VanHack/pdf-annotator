@@ -16,7 +16,7 @@ import 'bootstrap/dist/css/bootstrap-theme.css';
 import 'font-awesome/css/font-awesome.min.css';
 
 const store = createStore(reducers, composeWithDevTools(
-  applyMiddleware(thunk),
+  applyMiddleware(require('redux-immutable-state-invariant').default(), thunk),
 ));
 
 ReactDOM.render((

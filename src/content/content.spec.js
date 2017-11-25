@@ -5,6 +5,10 @@ import Content from "./content";
 import ContentPdf from "./contentPdf";
 import ContentHtml from "./contentHtml";
 
+jest.mock('rangy');
+jest.mock('rangy/lib/rangy-highlighter');
+jest.mock('rangy/lib/rangy-classapplier');
+
 describe("Content Component", () => {
   
   it('should return the ContentPdf icon if type is pdf', () => {

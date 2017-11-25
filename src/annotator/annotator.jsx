@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+
 import rangy from 'rangy'
 import rangyHighlight from 'rangy/lib/rangy-highlighter';
 import rangyClassApplier from 'rangy/lib/rangy-classapplier';
 
+import { createHighlight, removeHighlight, createAnnotation, removeAnnotation } from './actions'
 import TextSelector from './selector'
 import Bubble from './bubble'
 
@@ -40,15 +44,45 @@ export default class Annotator extends Component {
     this.onSelectionChange = this.onSelectionChange.bind(this);
   }
 
+  componentDidMount() {
+    this.parseHighlights();
+  }
+
+  parseHighlights() {
+    if(this.props.highlights) {
+      const serializedHighlights = [
+        "type:textContent", 
+        ...this.props.highlights.map((h) => 
+          [
+            h.rangeStart,
+            h.rangeEnd,
+            h.id,
+            h.classApplier,
+            h.elementId
+          ].join("$"))
+      ].join("|")
+
+      setTimeout(() =>
+        this.highlighter.deserialize(serializedHighlights)
+      , 1000);
+    }
+  }
+
   createHighlight() {
-    this.highlighter.highlightSelection("highlight");
+    const highlights = this.highlighter.highlightSelection("highlight");
     this.serialized = this.highlighter.serialize();
+    
+    const highlight = highlights[0]
+    highlight.page = window.location.toString()
+    this.props.createHighlight(highlight)
+    
     this.clearSelection();
   }
 
   onClear = () => {
     this.highlighter.removeAllHighlights();
   };
+
   onRestore = () => {
     if (this.serialized) {
       this.highlighter.deserialize(this.serialized);
@@ -96,3 +130,7 @@ export default class Annotator extends Component {
   }
 }
 
+const mapStateToProps = state => ({highlights: state.highlights[window.location.toString()] })
+const mapDispatchToProps = dispatch => bindActionCreators({ createHighlight, removeHighlight, createAnnotation, removeAnnotation }, dispatch)
+
+export const AnnotatorContainer = connect(mapStateToProps, mapDispatchToProps)(Annotator)

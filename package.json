@@ -83,7 +83,8 @@
       "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs)$"
     ],
     "moduleNameMapper": {
-      "^react-native$": "react-native-web"
+      "^react-native$": "react-native-web",
+      "\\.worker.js": "<rootDir>/__mocks__/workerMock.js"
     },
     "moduleFileExtensions": [
       "web.js",
@@ -104,7 +105,9 @@
     "extends": "react-app"
   },
   "devDependencies": {
+    "copy-webpack-plugin": "^4.2.3",
     "enzyme": "^3.2.0",
-    "enzyme-adapter-react-16": "^1.1.0"
+    "enzyme-adapter-react-16": "^1.1.0",
+    "redux-immutable-state-invariant": "^2.1.0"
   }
 }

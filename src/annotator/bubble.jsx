@@ -13,8 +13,8 @@ export default class Bubble extends Component {
         <div className="tooltip-inner">
           <div className="btn-group" role="group" aria-label="First group">
             <button type="button" className="btn btn-default" onClick={this.props.onHighlight}>
-              <i className="fa fa-quote-left"></i>
-              <span>Annotate</span>
+              <i className="fa fa-pencil"></i>
+              <span>Highlight</span>
             </button>
           </div>
         </div>
