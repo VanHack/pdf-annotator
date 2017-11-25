@@ -7,7 +7,7 @@ const rootReducer = combineReducers({
   contentList: contentListReducer,
   highlights: highlightReducer,
   form: formReducer.plugin({
-    account: (state, action) => {
+    annotation: (state, action) => {
       switch(action.type) {
         case 'ANNOTATION_SAVE_SUCCESS':
           return undefined;

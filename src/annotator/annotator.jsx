@@ -41,7 +41,6 @@ export default class Annotator extends Component {
 
     this.createHighlight = this.createHighlight.bind(this);
     this.removeHighlight = this.removeHighlight.bind(this);
-    this.createAnnotation = this.createAnnotation.bind(this);
     this.onSelectionChange = this.onSelectionChange.bind(this);
     this.hideAnnotationPane = this.hideAnnotationPane.bind(this);
   }
@@ -70,7 +69,7 @@ export default class Annotator extends Component {
     }
   }
 
-  createHighlight() {
+  createHighlight(e) {
     const highlights = this.highlighter.highlightSelection("highlight");
     if (!highlights || highlights.length <= 0)
       return;
@@ -82,6 +81,8 @@ export default class Annotator extends Component {
     const state = this.state;
     state.showBubble = false;    
     this.setState(state);
+
+    this.showAnnotationPane(highlight, e.clientY);
   }
   
   removeHighlight() {
@@ -110,12 +111,6 @@ export default class Annotator extends Component {
     const state = this.state;
     state.showAnnotationPane = false;
     this.setState(state);
-  }
-
-  createAnnotation() {
-    console.log('[createAnnotation]');
-    this.highlighter.highlightSelection("annotation");
-    this.clearSelection();
   }
 
   clearSelection() {

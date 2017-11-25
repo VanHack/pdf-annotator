@@ -3,7 +3,7 @@ import reducer from './reducer'
 it('should have a default value', () => {
   const nextState = reducer();
 
-  expect(nextState).toEqual([]);
+  expect(nextState).toEqual({});
 });
 
 it('should return current value if invalid action', () => {
