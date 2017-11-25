@@ -15,6 +15,7 @@ export function createAnnotation (annotation) {
   return dispatch => Promise.resolve()
     .then(response => {
       dispatch({type: 'ADD_ANNOTATION', payload: annotation })
+      dispatch({type: "ANNOTATION_SAVE_SUCCESS"})
     })
 }
 export function removeAnnotation (annotation) {

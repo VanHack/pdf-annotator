@@ -1,0 +1,11 @@
+.Annotation-container {
+  width: 300px;
+  position: absolute;
+  max-height: 500px;
+  overflow: auto;
+  left: 100%;
+}
+
+.Annotation-container textarea {
+  width: 100%;
+}

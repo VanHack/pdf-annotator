@@ -6,9 +6,10 @@ import rangy from 'rangy'
 import rangyHighlight from 'rangy/lib/rangy-highlighter';
 import rangyClassApplier from 'rangy/lib/rangy-classapplier';
 
-import { createHighlight, removeHighlight, createAnnotation, removeAnnotation } from './actions'
+import { createHighlight, removeHighlight } from './actions'
 import TextSelector from './selector'
 import Bubble from './bubble'
+import {AnnotationPaneContainer} from './annotationPane'
 
 import './annotator.css';
 
@@ -34,7 +35,7 @@ export default class Annotator extends Component {
         onclick: function (e) {
           e.preventDefault();
           var highlight = self.highlighter.getHighlightForElement(this);
-          alert('show annotator pane '+ highlight.id);
+          self.showAnnotationPane(highlight, e.clientY);
         }
       }
     }));
@@ -43,6 +44,7 @@ export default class Annotator extends Component {
     this.removeHighlight = this.removeHighlight.bind(this);
     this.createAnnotation = this.createAnnotation.bind(this);
     this.onSelectionChange = this.onSelectionChange.bind(this);
+    this.hideAnnotationPane = this.hideAnnotationPane.bind(this);
   }
 
   componentDidMount() {
@@ -78,6 +80,9 @@ export default class Annotator extends Component {
     this.props.createHighlight(highlight)
     
     this.clearSelection();
+    var state = this.state
+    state.showBubble = false;    
+    this.setState(state)
   }
   
   removeHighlight() {
@@ -88,6 +93,24 @@ export default class Annotator extends Component {
     this.props.removeHighlight(highlight)
     
     this.clearSelection();
+  }
+
+  showAnnotationPane(highlight, clientY) {
+    this.hideAnnotationPane();
+    var state = this.state;
+    state.annotationHighlight = highlight.id;
+    state.showAnnotationPane = true;
+    const top = window.pageYOffset - (document.clientTop || 0);
+    state.panePosition = {
+      top: clientY + top - 300
+    }
+    this.setState(state);
+  }
+  
+  hideAnnotationPane() {
+    var state = this.state;
+    state.showAnnotationPane = false;
+    this.setState(state);
   }
 
   createAnnotation() {
@@ -109,7 +132,7 @@ export default class Annotator extends Component {
       const top = window.pageYOffset - (document.clientTop || 0);
       state.bubblePosition = {
         left: (boundary.left + boundary.width / 2) - 35 - container.offsetLeft,
-        top: boundary.top - 60 + top
+        top: boundary.top - 130 + top
       }
     }
     
@@ -117,22 +140,29 @@ export default class Annotator extends Component {
   }
 
   render() {
-    const { showBubble, bubblePosition } = this.state;
+    const { showBubble, bubblePosition, showAnnotationPane, panePosition, annotationHighlight } = this.state;
     return (
       <div className="Annotator-container">
         <TextSelector onSelectionChange={this.onSelectionChange}>
-          <Bubble 
-            show={showBubble}
-            position={bubblePosition}
-            onHighlight={this.createHighlight} />
           {this.props.children}
         </TextSelector>
+        <Bubble 
+          show={showBubble}
+          position={bubblePosition}
+          onHighlight={this.createHighlight} />
+
+        {showAnnotationPane ?
+          <AnnotationPaneContainer
+            show={showAnnotationPane}
+            position={panePosition}
+            highlight={annotationHighlight}
+            onHide={this.hideAnnotationPane} /> : ""}
       </div>
     )
   }
 }
 
 const mapStateToProps = state => ({highlights: state.highlights[window.location.toString()] })
-const mapDispatchToProps = dispatch => bindActionCreators({ createHighlight, removeHighlight, createAnnotation, removeAnnotation }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ createHighlight, removeHighlight }, dispatch)
 
 export const AnnotatorContainer = connect(mapStateToProps, mapDispatchToProps)(Annotator)

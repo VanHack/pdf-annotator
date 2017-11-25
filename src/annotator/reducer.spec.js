@@ -61,3 +61,23 @@ it('handles REMOVE_HIGHLIGHT', () => {
   const nextState = reducer(initialState, action);
   expect(nextState[highlight.page].length).toEqual(2)
 });
+
+it('handles ADD_ANNOTATION', () => {
+  const data = {
+    page: 'test',
+    highlight: 3,
+    annotation: {name: 'Test', notes: "Lorem"}
+  }
+  const initialState = {
+    [data.page]: [{ id: 1 }, { id: 2 }, { id: 3 }]
+  };
+  const action = {
+    type: 'ADD_ANNOTATION',
+    payload: data
+  }
+
+  const nextState = reducer(initialState, action);
+  const annotations = nextState[data.page][2].annotations;
+  expect(annotations.length).toEqual(1)
+  expect(annotations).toEqual([data.annotation]);
+});

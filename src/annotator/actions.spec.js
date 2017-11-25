@@ -46,7 +46,7 @@ describe('async actions', () => {
       test: 1
     }
     const expectedActions = [
-      { type: 'ADD_ANNOTATION', payload: annotation }
+      { type: 'ADD_ANNOTATION', payload: annotation }, {"type": "ANNOTATION_SAVE_SUCCESS"}
     ];
 
     const store = mockStore({});
