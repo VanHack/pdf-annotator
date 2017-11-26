@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
 
-import { fetchContent } from './actions';
+import { fetchContent } from "./actions";
 
-import AuthorDetail from '../author-detail/authorDetail';
-import Content from '../content/content';
+import AuthorDetail from "../author-detail/authorDetail";
+import Content from "../content/content";
 
 export default class ContentDetail extends Component {
   componentWillMount() {
@@ -44,6 +44,6 @@ function pick(o, ...props) {
 }
 
 const mapStateToProps = (state, props) => ({content: state.currentContent});
-const mapDispatchToProps = dispatch => bindActionCreators({ fetchContent }, dispatch);
+const mapDispatchToProps = dispatch => (bindActionCreators({ fetchContent }, dispatch));
 
 export const ContentDetailContainer = connect(mapStateToProps, mapDispatchToProps)(ContentDetail);

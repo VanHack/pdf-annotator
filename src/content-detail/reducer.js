@@ -4,7 +4,7 @@ function set(state, payload) {
 
 export default function(state = [], action = {}) {
   switch (action.type) {
-  case 'SET_CURRENT_CONTENT':
+  case "SET_CURRENT_CONTENT":
     return set(state, action.payload);
   default:
     return state;
