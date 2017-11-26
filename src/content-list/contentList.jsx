@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
-import { fetchContent } from './actions'
-import ContentItem from './contentItem'
+import { fetchContent } from './actions';
+import ContentItem from './contentItem';
 import './contentList.css';
 
 export default class ContentList extends Component {
@@ -28,7 +28,7 @@ export default class ContentList extends Component {
   };
 }
 
-const mapStateToProps = state => ({items: state.contentList})
-const mapDispatchToProps = dispatch => bindActionCreators({ fetchContent }, dispatch)
+const mapStateToProps = state => ({items: state.contentList});
+const mapDispatchToProps = dispatch => bindActionCreators({ fetchContent }, dispatch);
 
-export const ContentListContainer = connect(mapStateToProps, mapDispatchToProps)(ContentList)
+export const ContentListContainer = connect(mapStateToProps, mapDispatchToProps)(ContentList);

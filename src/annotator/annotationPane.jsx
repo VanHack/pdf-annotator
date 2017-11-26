@@ -21,8 +21,7 @@ export default class AnnotationPane extends Component {
 
   nextId = () => {
     const annotationId = (this.props.annotations.length+1) + '';
-    const id = this.props.highlight + annotationId.padStart(9,'0');
-    return id;
+    return this.props.highlight + annotationId.padStart(9,'0');
   };
 
   createAnnotation(values) {
@@ -73,6 +72,7 @@ AnnotationPane.defaultProps = {
   position: {}
 };
 
+// TODO remove the code duplication of this with annotator.jsx's
 const mapStateToProps = (state, props) => {
   const highlights = state.highlights[window.location.toString()];
   const filter = highlight => highlight.id === props.highlight;

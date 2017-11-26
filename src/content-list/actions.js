@@ -1,10 +1,7 @@
-import content from './content.json'
+import { getFromApi } from '../api/api';
 
 export function fetchContent () {
-  return dispatch => {
-    return Promise.resolve(content)
-      .then(response => {
-        dispatch({type: 'SET_CONTENT', payload: content })
-      })
-  }
+  return getFromApi('/documents', (dispatch, documents) => {
+    dispatch({type: 'SET_CONTENT', payload: documents });
+  });
 }
