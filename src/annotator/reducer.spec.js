@@ -15,35 +15,26 @@ it('should return current value if invalid action', () => {
 });
 
 it('handles ADD_HIGHLIGHT', () => {
-  const highlight = {
+  const data = {
     page: 1,
-    characterRange: {
-      start: 1,
-      end: 2
+    highlight: {
+      rangeStart: 1,
+      rangeEnd: 2
     },
+
     id: 1,
-    classApplier: {
-      className: 'name'
-    },
+    classApplier: 'name',
     containerElementId: null
   }
   const initialState = [];
   const action = {
     type: 'ADD_HIGHLIGHT',
-    payload: highlight
-  }
-  const characterRange = highlight.characterRange;
-  const expected = {
-      rangeStart: characterRange.start,
-      rangeEnd: characterRange.end,
-      id: highlight.id,
-      classApplier: highlight.classApplier.className,
-      elementId: highlight.containerElementId
+    payload: data
   }
 
   const nextState = reducer(initialState, action);
   expect(nextState[1]).toBeDefined()
-  expect(nextState[1]).toEqual([expected]);
+  expect(nextState[1]).toEqual([data.highlight]);
 });
 
 it('handles REMOVE_HIGHLIGHT', () => {
@@ -65,7 +56,7 @@ it('handles REMOVE_HIGHLIGHT', () => {
 it('handles ADD_ANNOTATION', () => {
   const data = {
     page: 'test',
-    highlight: 3,
+    highlightId: 3,
     annotation: {name: 'Test', notes: "Lorem"}
   }
   const initialState = {

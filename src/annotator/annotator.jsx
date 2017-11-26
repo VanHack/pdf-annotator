@@ -43,32 +43,21 @@ export default class Annotator extends Component {
     this.removeHighlight = this.removeHighlight.bind(this);
     this.onSelectionChange = this.onSelectionChange.bind(this);
     this.hideAnnotationPane = this.hideAnnotationPane.bind(this);
-
-    this.populateHighlights();
+  }
+  
+  componentWillMount() {
+    this.props.loadHighlights(window.location.toString());
   }
 
-  componentDidMount() {
-    this.parseHighlights();
+  componentWillReceiveProps(nextProps) {
+    this.parseHighlights(nextProps.highlights);
   }
 
-  // TODO: replace by pre-loading Redux database with the highlights and annotations
-  populateHighlights = () => {
-    const func = loadHighlights((result) => {
-      console.log('highlightsFromApi: ' + result);
-      if (result) {
-        result.forEach((highlight) => {
-          console.log('... highlight: ' + JSON.stringify(highlight));
-        });
-      }
-    });
-    func();
-  };
-
-  parseHighlights() {
-    if(this.props.highlights) {
+  parseHighlights(highlights) {
+    if(highlights && highlights.length) {
       const serializedHighlights = [
         "type:textContent", 
-        ...this.props.highlights.map((h) => 
+        ...highlights.map((h) => 
           [
             h.rangeStart,
             h.rangeEnd,
@@ -89,15 +78,29 @@ export default class Annotator extends Component {
     if (!highlights || highlights.length <= 0)
       return;
     const highlight = highlights[0];
-    highlight.page = window.location.toString();
-    this.props.createHighlight(highlight);
+    
+    const characterRange = highlight.characterRange;
+    const data = {
+      page: window.location.toString(),
+      highlight: {
+        rangeStart: characterRange.start,
+        rangeEnd: characterRange.end,
+        id: highlight.id,
+        classApplier: highlight.classApplier.className,
+        elementId: highlight.containerElementId
+      }
+    }
+
     
     this.clearSelection();
     const state = this.state;
     state.showBubble = false;    
     this.setState(state);
-
-    this.showAnnotationPane(highlight, e.clientY);
+    const clientY = e.clientY;
+    this.props.createHighlight(data)
+      .then(() => {
+        this.showAnnotationPane(highlight, clientY);
+      })
   }
   
   removeHighlight() {
@@ -181,7 +184,9 @@ export default class Annotator extends Component {
   }
 }
 
-const mapStateToProps = state => ({highlights: state.highlights[window.location.toString()] });
-const mapDispatchToProps = dispatch => bindActionCreators({ createHighlight, removeHighlight }, dispatch);
+const mapStateToProps = state => {
+  return ({highlights: state.highlights[window.location.toString()] })
+};
+const mapDispatchToProps = dispatch => bindActionCreators({ loadHighlights, createHighlight, removeHighlight }, dispatch);
 
 export const AnnotatorContainer = connect(mapStateToProps, mapDispatchToProps)(Annotator);

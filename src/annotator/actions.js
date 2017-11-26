@@ -1,68 +1,53 @@
-import rp from 'request-promise-native';
+import axios from 'axios';
 
-const baseUrl = 'http://localhost:3001';
+const BASE_URL = 'http://localhost:3001/api';
 
-export function loadHighlights (callback) {
-  return getFromApi('/highlights', callback);
+export function loadHighlights (page) {
+  const url = `${BASE_URL}/highlights?page=${encodeURIComponent(page)}`
+  return dispatch => 
+    axios.get(url)
+    .then(response => {
+      dispatch({type: 'LOAD_HIGHLIGHTS', payload: {page, highlights: response.data.map(h => h.highlight) }} )
+    })
 }
 export function createHighlight (highlight) {
-  return saveToApi('/highlights', highlight, (dispatch) => {
-    dispatch({type: 'ADD_HIGHLIGHT', payload: highlight });
-  });
+  const url = `${BASE_URL}/highlights`
+  return dispatch => 
+    axios.post(url, highlight)
+    .then(response => {
+      dispatch({type: 'ADD_HIGHLIGHT', payload: highlight });
+    })
 }
 export function removeHighlight (highlight) {
-  return dispatch => Promise.resolve()
+  const url = `${BASE_URL}/highlights/${highlight}`
+  return dispatch => 
+    axios.delete(url)
     .then(response => {
       dispatch({type: 'REMOVE_HIGHLIGHT', payload: highlight });
     })
 }
+export function loadAnnotations (page, highlight) {
+  const url = `${BASE_URL}/highlights/${highlight}/annotations`
+  return dispatch => 
+    axios.get(url)
+    .then(response => {
+      dispatch({type: 'LOAD_ANNOTATIONS', payload: {page, highlight, annotations: response.data.map(h => h.annotation) }} )
+    })
+}
 export function createAnnotation (annotation) {
-  return saveToApi('/annotations', annotation, (dispatch) => {
-    dispatch({type: 'ADD_ANNOTATION', payload: annotation });
-    dispatch({type: "ANNOTATION_SAVE_SUCCESS"});
-  });
+  const url = `${BASE_URL}/annotations`
+  return dispatch => 
+    axios.post(url, annotation)
+    .then(response => {
+      dispatch({type: 'ADD_ANNOTATION', payload: annotation });
+      dispatch({type: "ANNOTATION_SAVE_SUCCESS"});
+    })
 }
 export function removeAnnotation (annotation) {
-  return dispatch => Promise.resolve()
+  const url = `${BASE_URL}/annotations/${annotation}`
+  return dispatch => 
+    axios.delete(url)
     .then(response => {
       dispatch({type: 'REMOVE_ANNOTATION', payload: annotation });
     })
 }
-
-// TODO improve with filters: https://github.com/typicode/json-server#filter
-const getFromApi = (endpoint, then) => {
-  const options = {
-    method: 'GET',
-    uri: baseUrl + endpoint,
-    headers: {
-      'User-Agent': 'Request-Promise'
-    },
-    json: true // Automatically parses the JSON string in the response
-  };
-  // console.log('[getFromApi] making the call, url: ' + baseUrl + endpoint);
-  return () =>
-    rp(options)
-      .then((result) => {
-        // console.log('[getFromApi] result: '+result);
-        if (then) then(result);
-      })
-      .catch(function (err) {
-        console.log('[getFromApi] Error calling API: ', err);
-      });
-};
-
-const saveToApi = (endpoint, body, then) => {
-  const options = {
-    method: 'POST',
-    uri: baseUrl + endpoint,
-    body: body,
-    json: true // Automatically stringifies the body to JSON
-  };
-  // console.log('[saveToApi] body: '+JSON.stringify(body));
-  // console.log('[saveToApi] making the call, uri: '+ baseUrl + endpoint);
-  return dispatch =>
-    rp(options)
-    .then(() => then && then(dispatch))
-    .catch(function (err) {
-      console.log('[saveToApi] Error calling API: ', err);
-    });};

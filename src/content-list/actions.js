@@ -1,10 +1,13 @@
-import content from './content.json'
+import axios from 'axios';
+
+const BASE_URL = 'http://localhost:3001/api';
 
 export function fetchContent () {
-  return dispatch => {
-    return Promise.resolve(content)
-      .then(response => {
-        dispatch({type: 'SET_CONTENT', payload: content })
-      })
-  }
+  const url = `${BASE_URL}/documents`
+  return dispatch => 
+    axios.get(url)
+    .then(response => {
+      console.log(response)
+      dispatch({type: 'SET_CONTENT', payload: response.data })
+    })
 }

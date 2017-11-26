@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
-import { createAnnotation, removeAnnotation } from './actions'
+import { loadAnnotations, createAnnotation, removeAnnotation } from './actions'
 import {AnnotationFormContainer} from './annotationForm'
 import AnnotationList from './annotationList'
 import AddButton from './addButton';
@@ -20,17 +20,19 @@ export default class AnnotationPane extends Component {
   }
 
   nextId = () => {
-    const annotationId = (this.props.annotations.length+1) + '';
-    const id = this.props.highlight + annotationId.padStart(9,'0');
-    return id;
+    return Math.random().toString(36).substring(2) + (new Date()).getTime().toString(36);
   };
+
+  componentWillMount() {
+    this.props.loadAnnotations(window.location.toString(), this.props.highlight);
+  }
 
   createAnnotation(values) {
     this.hideAddForm();
     const data = {
       id: this.nextId(),
       page: window.location.toString(),
-      highlight: this.props.highlight,
+      highlightId: this.props.highlight,
       annotation: {...values, date: new Date()}
     };
     this.props.createAnnotation(data);
@@ -79,6 +81,6 @@ const mapStateToProps = (state, props) => {
   const annotations = highlights && highlights.filter(filter).length ? highlights.filter(filter)[0].annotations || [] : [];
   return {annotations};
 };
-const mapDispatchToProps = dispatch => bindActionCreators({ createAnnotation, removeAnnotation }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ loadAnnotations, createAnnotation, removeAnnotation }, dispatch);
 
 export const AnnotationPaneContainer = connect(mapStateToProps, mapDispatchToProps)(AnnotationPane);

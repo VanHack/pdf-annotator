@@ -64,7 +64,7 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
-    "start-mockapi": "json-server --watch src/api/db.json --port 3001",
+    "start-mockapi": "json-server --watch src/api/db.json --port 3001 --routes src/api/routes.json",
     "generate-mock-data": "node buildScripts/generateMockData"
   },
   "jest": {
@@ -115,6 +115,7 @@
     "copy-webpack-plugin": "^4.2.3",
     "enzyme": "^3.2.0",
     "enzyme-adapter-react-16": "^1.1.0",
+    "json-server": "^0.12.1",
     "redux-immutable-state-invariant": "^2.1.0"
   }
 }
