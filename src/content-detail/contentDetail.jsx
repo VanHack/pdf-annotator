@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import content from '../content-list/content.json';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+
+import { fetchContent } from './actions';
 
 import AuthorDetail from '../author-detail/authorDetail';
 import Content from '../content/content';
@@ -8,14 +11,11 @@ import Content from '../content/content';
 export default class ContentDetail extends Component {
   componentWillMount() {
     const id = parseInt(this.props.match.params.id, 10);
-    let filter = content.filter(c => c.id === id)[0];
-    this.setState({
-      content: filter
-    });
+    this.props.fetchContent(id);
   }
 
   render() {
-    const {content} = this.state;
+    const {content} = this.props;
     const author = pick(content, "author", "author_url");
 
     return (
@@ -42,3 +42,8 @@ function pick(o, ...props) {
     return current;
   }, {});
 }
+
+const mapStateToProps = (state, props) => ({content: state.currentContent});
+const mapDispatchToProps = dispatch => bindActionCreators({ fetchContent }, dispatch);
+
+export const ContentDetailContainer = connect(mapStateToProps, mapDispatchToProps)(ContentDetail);

@@ -4,7 +4,8 @@ import { MemoryRouter } from 'react-router-dom'
 
 import ContentList from "./contentList";
 import ContentItem from "./contentItem";
-import content from "./content.json";
+
+const content = [1, 2, 3]
 
 describe("ContentList Component", () => {
   let props;
