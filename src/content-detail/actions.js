@@ -10,5 +10,5 @@ export function fetchContent (id) {
       .then(response => (
         dispatch({type: "SET_CURRENT_CONTENT", payload: response.data })
       ))
-    )
+    );
 }

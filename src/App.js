@@ -3,7 +3,7 @@ import {BrowserRouter as Router, Route} from "react-router-dom";
 
 import Home from "./home/home";
 import {ContentDetailContainer} from "./content-detail/contentDetail";
-import logo from "./logo.jpg"
+import logo from "./logo.jpg";
 import "./App.css";
 
 class App extends Component {
