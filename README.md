@@ -1,4 +1,4 @@
-# PDF/HTML highlither and annotator [![Build Status](https://travis-ci.org/otaviosoares/pdf-annotator.svg?branch=master)](https://travis-ci.org/otaviosoares/pdf-annotator)
+# PDF/HTML highlither and annotator [![Build Status](https://travis-ci.org/otaviosoares/pdf-annotator.svg?branch=master)](https://travis-ci.org/otaviosoares/pdf-annotator) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/8c9b6a7f85d049e39adaf028b62c3342)](https://www.codacy.com/app/leite08/pdf-annotator?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=otaviosoares/pdf-annotator&amp;utm_campaign=Badge_Grade)
 ## React and Redux
 
 This application allows for the user to make highlights and annotations
