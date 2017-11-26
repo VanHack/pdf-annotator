@@ -1,51 +1,58 @@
-import { getFromApi, saveToApi } from '../api/api';
+import axios from 'axios';
 
-const highlightsEndpoint = '/highlights';
-const annotationsEndpoint = '/annotations';
+// TODO move to global parameters
+const HIGHLIGHTS_URI = '/highlights';
+const ANNOTATIONS_URI = '/annotations';
+const BASE_URL = 'http://localhost:3001/api';
+const BASE_HIGHLIGHTS = `${BASE_URL}${HIGHLIGHTS_URI}`;
+const BASE_ANNOTATIONS = `${BASE_URL}${ANNOTATIONS_URI}`;
 
-export function loadHighlights (then) {
-  return getFromApi(highlightsEndpoint, (dispatch, highlights) => {
-    highlights.forEach((highlight) => {
-      dispatch({type: 'ADD_HIGHLIGHT', payload: highlight });
-    });
-    // TODO: didn't work...
-    // dispatch({ type: 'SET_HIGHLIGHTS', payload: highlights });
-    if (then) then();
-  });
+export function loadHighlights (page) {
+  const url = `${BASE_HIGHLIGHTS}?page=${encodeURIComponent(page)}`;
+  return dispatch =>
+    axios.get(url)
+      .then(response => {
+        dispatch({type: 'LOAD_HIGHLIGHTS', payload: {page, highlights: response.data.map(h => h.highlight) }} );
+      });
 }
 export function createHighlight (highlight) {
-  return saveToApi(highlightsEndpoint, highlight, dispatch => {
-    dispatch({ type: 'ADD_HIGHLIGHT', payload: highlight });
-  });
+  const url = `${BASE_HIGHLIGHTS}`;
+  return dispatch =>
+    axios.post(url, highlight)
+      .then(response => {
+        dispatch({type: 'ADD_HIGHLIGHT', payload: highlight });
+      });
 }
-// TODO check, specially with its annotations... removing them as well?
 export function removeHighlight (highlight) {
-  return dispatch => Promise.resolve()
-    .then(response => {
-      dispatch({ type: 'REMOVE_HIGHLIGHT', payload: highlight });
-    })
+  const url = `${BASE_HIGHLIGHTS}/${highlight}`;
+  return dispatch =>
+    axios.delete(url)
+      .then(response => {
+        dispatch({type: 'REMOVE_HIGHLIGHT', payload: highlight });
+      });
 }
-
-export function loadAnnotations (then) {
-  return getFromApi(annotationsEndpoint, (dispatch, annotations) => {
-    console.log('[loadAnnotations] annotations.length: '+annotations.length);
-    // TODO also try to avoid repetition here
-    annotations.forEach((annotation) => {
-      dispatch({type: 'ADD_ANNOTATION', payload: annotation });
-      dispatch({ type: "ANNOTATION_SAVE_SUCCESS"});
-    });
-    if (then) then();
-  });
+export function loadAnnotations (page, highlight) {
+  const url = `${BASE_HIGHLIGHTS}/${highlight}${ANNOTATIONS_URI}`;
+  return dispatch =>
+    axios.get(url)
+      .then(response => {
+        dispatch({type: 'LOAD_ANNOTATIONS', payload: {page, highlight, annotations: response.data.map(h => h.annotation) }} );
+      });
 }
 export function createAnnotation (annotation) {
-  return saveToApi(annotationsEndpoint, annotation, dispatch => {
-    dispatch({ type: 'ADD_ANNOTATION', payload: annotation });
-    dispatch({ type: "ANNOTATION_SAVE_SUCCESS"});
-  });
+  const url = `${BASE_ANNOTATIONS}`;
+  return dispatch =>
+    axios.post(url, annotation)
+      .then(response => {
+        dispatch({type: 'ADD_ANNOTATION', payload: annotation });
+        dispatch({type: "ANNOTATION_SAVE_SUCCESS"});
+      })
 }
 export function removeAnnotation (annotation) {
-  return dispatch => Promise.resolve()
-    .then(response => {
-      dispatch({ type: 'REMOVE_ANNOTATION', payload: annotation });
-    });
+  const url = `${BASE_ANNOTATIONS}/${annotation}`;
+  return dispatch =>
+    axios.delete(url)
+      .then(response => {
+        dispatch({type: 'REMOVE_ANNOTATION', payload: annotation });
+      });
 }

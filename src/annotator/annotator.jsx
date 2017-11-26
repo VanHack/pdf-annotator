@@ -6,7 +6,7 @@ import rangy from 'rangy';
 import rangyHighlight from 'rangy/lib/rangy-highlighter';
 import rangyClassApplier from 'rangy/lib/rangy-classapplier';
 
-import { loadAnnotations, loadHighlights, createHighlight, removeHighlight } from './actions';
+import { loadHighlights, createHighlight, removeHighlight } from './actions';
 import TextSelector from './selector';
 import Bubble from './bubble';
 import {AnnotationPaneContainer} from './annotationPane';
@@ -39,25 +39,25 @@ export default class Annotator extends Component {
       }
     }));
 
-    this.createHighlightInner = this.createHighlightInner.bind(this);
+    this.createHighlight = this.createHighlight.bind(this);
     this.removeHighlight = this.removeHighlight.bind(this);
     this.onSelectionChange = this.onSelectionChange.bind(this);
     this.hideAnnotationPane = this.hideAnnotationPane.bind(this);
   }
 
-  componentDidMount() {
-    this.props.loadHighlights(() => {
-      this.parseHighlights();
-    });
-    this.props.loadAnnotations();
+  componentWillMount() {
+    this.props.loadHighlights(window.location.toString());
   }
 
-  parseHighlights() {
-    // console.log('[parse] highlights: '+ this.props.highlights);
-    if(this.props.highlights) {
+  componentWillReceiveProps(nextProps) {
+    this.parseHighlights(nextProps.highlights);
+  }
+
+  parseHighlights(highlights) {
+    if(highlights && highlights.length) {
       const serializedHighlights = [
         "type:textContent", 
-        ...this.props.highlights.map((h) => 
+        ...highlights.map((h) =>
           [
             h.rangeStart,
             h.rangeEnd,
@@ -73,20 +73,33 @@ export default class Annotator extends Component {
     }
   }
 
-  createHighlightInner(e) {
+  createHighlight(e) {
     const highlights = this.highlighter.highlightSelection("highlight");
     if (!highlights || highlights.length <= 0)
       return;
     const highlight = highlights[0];
-    highlight.page = window.location.toString();
-    this.props.createHighlight(highlight);
+
+    const characterRange = highlight.characterRange;
+    const data = {
+      page: window.location.toString(),
+      highlight: {
+        id: highlight.id,
+        rangeStart: characterRange.start,
+        rangeEnd: characterRange.end,
+        classApplier: highlight.classApplier.className,
+        elementId: highlight.containerElementId
+      }
+    };
     
     this.clearSelection();
     const state = this.state;
     state.showBubble = false;    
     this.setState(state);
-
-    this.showAnnotationPane(highlight, e.clientY);
+    const clientY = e.clientY;
+    this.props.createHighlight(data)
+      .then(() => {
+        this.showAnnotationPane(highlight, clientY);
+      });
   }
   
   removeHighlight() {
@@ -158,7 +171,7 @@ export default class Annotator extends Component {
         {showBubble ?
           <Bubble
             position={bubblePosition}
-            onHighlight={this.createHighlightInner} /> : ""}
+            onHighlight={this.createHighlight} /> : ""}
         {showAnnotationPane ?
           <AnnotationPaneContainer
             position={panePosition}
@@ -169,14 +182,9 @@ export default class Annotator extends Component {
   }
 }
 
-// const mapStateToProps = state => ({highlights: state.highlights[window.location.toString()] });
-// TODO: same code as annotationPane.jsx...
-const mapStateToProps = (state, props) => {
-  const highlights = state.highlights[window.location.toString()];
-  const filter = highlight => highlight.id === props.highlight;
-  const annotations = highlights && highlights.filter(filter).length ? highlights.filter(filter)[0].annotations || [] : [];
-  return {highlights, annotations};
+const mapStateToProps = state => {
+  return ({highlights: state.highlights[window.location.toString()] })
 };
-const mapDispatchToProps = dispatch => bindActionCreators({ loadAnnotations, loadHighlights, createHighlight, removeHighlight }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ loadHighlights, createHighlight, removeHighlight }, dispatch);
 
 export const AnnotatorContainer = connect(mapStateToProps, mapDispatchToProps)(Annotator);

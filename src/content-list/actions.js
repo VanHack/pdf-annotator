@@ -1,7 +1,13 @@
-import { getFromApi } from '../api/api';
+import axios from 'axios';
+
+// TODO move to global parameters
+const BASE_URL = 'http://localhost:3001/api';
 
 export function fetchContent () {
-  return getFromApi('/documents', (dispatch, documents) => {
-    dispatch({type: 'SET_CONTENT', payload: documents });
-  });
+  const url = `${BASE_URL}/documents`;
+  return dispatch =>
+    axios.get(url)
+      .then(response => {
+        dispatch({type: 'SET_CONTENT', payload: response.data });
+      });
 }

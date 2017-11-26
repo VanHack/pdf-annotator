@@ -1,10 +1,10 @@
-# PDF/HTML highlither and annotator
+# PDF/HTML highlither and annotator [![Build Status](https://travis-ci.org/otaviosoares/pdf-annotator.svg?branch=master)](https://travis-ci.org/otaviosoares/pdf-annotator)
 ## React and Redux
 
 This application allows for the user to make highlights and annotations
 on PDF files and HTML pages.
 
-![home image](https://raw.githubusercontent.com/leite08/rp_bands-in-town/master/docs/home.png "Home image of the application")
+![Screenshot](screenshot.png)
 
 Built for the VanHack Week Nov/2017:
 http://www.vanhack.com/week/
@@ -29,7 +29,7 @@ After forking and cloning the repo:
 
     cd pdf-annotator
     npm install
-    npm start-mockapi
+    npm run start-mockapi
     npm start
 
 Obs.: `npm start-mockapi` will start the mock API server.
