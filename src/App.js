@@ -11,11 +11,14 @@ class App extends Component {
     return (
       <div>
         <nav className="navbar navbar-default">
-          <div className="container-fluid">
+          <div className="container">
             <div className="navbar-header">
               <a href="">
                 <img alt="Brand" src={logo} />
               </a>
+            </div>
+            <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <p className="navbar-text">Rockies & Prairies > Pintellect Challenge</p>
             </div>
           </div>
         </nav>

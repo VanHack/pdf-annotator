@@ -24,50 +24,6 @@
       "serializedAnnotations": ""
     }
   ],
-  "highlights": [
-    {
-      "page": "http://localhost:3000/detail/1",
-      "highlight": {
-        "rangeStart": 607,
-        "rangeEnd": 616,
-        "id": 1,
-        "classApplier": "highlight",
-        "elementId": null
-      },
-      "id": 1
-    },
-    {
-      "page": "http://localhost:3000/detail/1",
-      "highlight": {
-        "rangeStart": 1106,
-        "rangeEnd": 1116,
-        "id": 2,
-        "classApplier": "highlight",
-        "elementId": null
-      },
-      "id": 2
-    }
-  ],
-  "annotations": [
-    {
-      "id": "b51xq2aah2njag2cyns",
-      "page": "http://localhost:3000/detail/1",
-      "highlightId": 1,
-      "annotation": {
-        "name": "sdfsd",
-        "notes": "sdfsdf",
-        "date": "2017-11-26T01:06:04.024Z"
-      }
-    },
-    {
-      "id": "a632gwtgh1ajag2eyie",
-      "page": "http://localhost:3000/detail/1",
-      "highlightId": 2,
-      "annotation": {
-        "name": "asdas",
-        "notes": "adasd",
-        "date": "2017-11-26T01:07:37.142Z"
-      }
-    }
-  ]
+  "highlights": [],
+  "annotations": []
 }
